@@ -1,0 +1,154 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <title>Estimote Sticker Tracking</title>
+    <style>
+      body {
+        background: rgb(163, 195, 167);
+        font-family: -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      }
+
+      #stickers {
+        height: 300px;
+        width: 768px;
+        max-width: 100%;
+      }
+
+      .vertical-center {
+        position: absolute;
+        top: 0; right: 0; bottom: 0; left: 0;
+        margin: auto;
+      }
+
+      #header {
+        color: #fff;
+        font-size: 40px;
+        text-align: center;
+        text-transform: uppercase;
+      }
+
+      #status, #beacons {
+        padding: 1.2em 1em;
+        text-align: center;
+        color: #fff;
+        background-color: #870052;
+        font-size: 14px;
+      }
+      
+      #status ul, #beacons ul {
+        width: 100%;
+        display: table;
+        table-layout: fixed;
+        margin: 0;
+        padding: 0;
+      }
+      
+      #beacons a {
+        color: #fff;
+      }
+      
+      #status ul li, #beacons ul li {
+        display: table-cell;
+      }
+      
+      #status b {
+        color: #cc0099;
+      }
+      
+      .moving {
+        background-color: #ff9999;
+      }
+    </style>
+  </head>
+  <body class="moving">
+
+    <div id="stickers" class="vertical-center">
+      <h1 id="header"></h1>
+      <div id="status"><ul><li id="counter">&nbsp;</li></ul></div>
+    </div>
+
+    <script>
+      var stickers = {
+        counter: 0,
+        myStickers: [
+          { id: 'db147379324e531f', type: 'bike', color: 'blueberry' },
+          { id: 'd651b14bfa013350', type: 'fridge', color: 'ice' },
+          { id: 'ed04ad74b609cbd8', type: 'generic', color: 'candy' },
+          { id: '7a8bd2e20728be30', type: 'door', color: 'blueberry' },
+          { id: '866185e4e86f37e0', type: 'bag', color: 'lemon' },
+          { id: 'a33b398f55cc0ad7', type: 'chair', color: 'ice' },
+          { id: 'd5173c070fd7788b', type: 'shoe', color: 'ice' },
+          { id: '5cbc89b1257e86a0', type: 'dog', color: 'mint' },
+          { id: 'd3e5b67bfbff10e0', type: 'car', color: 'mint' },
+          { id: '0bc17c7295c6990d', type: 'bed', color: 'candy'}
+        ],
+        headerText: document.getElementById('header'),
+        statusText: document.getElementById('status'),
+  
+        init: function() {
+          if ((typeof(WebSocket) == 'undefined') && (typeof(MozWebSocket) != 'undefined')) {
+            WebSocket = MozWebSocket;
+          };
+          ws = new WebSocket('ws://localhost:1122/');
+
+          ws.onopen = function(event) {
+            ws.send(JSON.stringify(stickers.myStickers[0]));
+            stickers.headerText.innerHTML = 'Scanning for ' + stickers.myStickers[0].color + ' ' + stickers.myStickers[0].type;
+            
+            var beacons = document.createElement('div');
+            beacons.id = 'beacons';
+            document.getElementById('stickers').appendChild(beacons);
+            var beaconlist = '<ul>';
+            stickers.myStickers.forEach(function(val, i) {
+              beaconlist += '<li><a href="javascript:stickers.scanFor(' + i + ');">' + val.type + '</a></li>';
+            });
+            beaconlist += '</ul>';
+            document.getElementById('beacons').innerHTML = beaconlist;
+            
+            var timer = setInterval(function() {
+              stickers.counter += 1;
+              document.getElementById('counter').innerHTML = stickers.counter;
+            }, 1000);
+          };
+
+          ws.onmessage = function(event) {
+            data = JSON.parse(event.data);
+            stickers.statusText.innerHTML = '<ul><li id="counter">&nbsp;</li><li>' + data.temperature + '&deg;</li><li><b>X:</b>' + data.acceleration.x + '</li><li><b>Y:</b> ' + data.acceleration.y + '</li><li><b>Z:</b> ' + data.acceleration.z + '</li></ul>';
+            if (data.moving) {
+              document.querySelector('body').classList.add('moving');
+            } else {
+              document.querySelector('body').classList.remove('moving');
+            }
+            stickers.counter = 0;
+          };
+
+          ws.onclose = function(event) {
+            ws = null;
+            stickers.headerText.innerHTML = 'Connection closed';
+            document.querySelector('body').classList.add('moving');
+          };
+
+          ws.onerror = function(event) {
+            stickers.headerText.innerHTML = 'Connection error';
+            document.querySelector('body').classList.add('moving');
+          };
+        },
+        scanFor: function(id) {
+          ws.send(JSON.stringify(stickers.myStickers[id]));
+          document.querySelector('body').classList.add('moving');
+          stickers.statusText.innerHTML = '<ul><li id="counter">&nbsp;</li></ul>';
+          stickers.headerText.innerHTML = 'Scanning for ' + stickers.myStickers[id].color + ' ' + stickers.myStickers[id].type;
+          stickers.counter = 0;
+        }
+          
+      }
+
+      stickers.init();
+    </script>
+  </body>
+</html>
