@@ -1,0 +1,28 @@
+{
+  "name": "estimote-sticker-tracking",
+  "version": "0.1.0",
+  "description": "Estimote stickers movement tracking web app",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dermike/estimote-sticker-tracking.git"
+  },
+  "keywords": [
+    "estimote",
+    "beacons",
+    "nearables"
+  ],
+  "author": "Mikael Jergefelt",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dermike/estimote-sticker-tracking/issues"
+  },
+  "homepage": "https://github.com/dermike/estimote-sticker-tracking#readme",
+  "dependencies": {
+    "noble": "^1.0.2",
+    "ws": "^0.7.2"
+  }
+}
