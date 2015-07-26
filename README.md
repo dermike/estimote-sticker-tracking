@@ -26,4 +26,15 @@ Open `index.html` in your browser and point the websocket connection to where yo
 
 ### Usage
 
+Add your own sticker id's to `index.html`:
+
+```javascript
+myStickers: [
+  { id: '866185e4e86f37e0', type: 'bag', color: 'lemon' },
+  { id: '0bc17c7295c6990d', type: 'bed', color: 'candy'},
+  { id: 'db147379324e531f', type: 'bike', color: 'blueberry' },
+  ...
+],
+```
+
 Status updates can be slow, so added a seconds counter to display how long ago the UI was updated.
