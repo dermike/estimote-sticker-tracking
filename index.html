@@ -51,7 +51,7 @@
       }
       
       body.not-in-range #header {
-        color: #996666;
+        color: #993333;
       }
       
       #status ul, #beacons ul {
@@ -85,11 +85,48 @@
       }
       
       #header.moving {
-        color: darkred;
+        color: #993333;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        -webkit-animation-name: hvr-buzz;
+        animation-name: hvr-buzz;
+        -webkit-animation-duration: 0.15s;
+        animation-duration: 0.15s;
+        -webkit-animation-timing-function: linear;
+        animation-timing-function: linear;
+        -webkit-animation-iteration-count: infinite;
+        animation-iteration-count: infinite;
       }
       
       .active {
         background-color: rgb(110, 145, 124);
+      }
+      
+      body.not-in-range .active {
+        background-color: #993333;
+      }
+      
+      @-webkit-keyframes hvr-buzz {
+        50% {
+          -webkit-transform: translateX(3px) rotate(2deg);
+          transform: translateX(3px) rotate(2deg);
+        }
+        100% {
+          -webkit-transform: translateX(-3px) rotate(-2deg);
+          transform: translateX(-3px) rotate(-2deg);
+        }
+      }
+      @keyframes hvr-buzz {
+        50% {
+          -webkit-transform: translateX(3px) rotate(2deg);
+          transform: translateX(3px) rotate(2deg);
+        }
+        100% {
+          -webkit-transform: translateX(-3px) rotate(-2deg);
+          transform: translateX(-3px) rotate(-2deg);
+        }
       }
     </style>
   </head>
