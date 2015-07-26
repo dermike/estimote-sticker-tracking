@@ -23,7 +23,6 @@
         position: fixed;
         left: 0;
         right: 0;
-        padding: 2.2em 1em;
         text-align: center;
         color: #fff;
         background-color: #870052;
@@ -36,7 +35,7 @@
       
       #beacons {
         bottom: 0;
-        background-color: rgb(110, 145, 124);
+        background-color: rgb(45, 37, 86);
       }
 
       .vertical-center {
@@ -56,7 +55,7 @@
         display: table;
         table-layout: fixed;
         margin: 0;
-        padding: 0;
+        padding: 0;        
       }
       
       #beacons a {
@@ -65,6 +64,7 @@
       
       #status ul li, #beacons ul li {
         display: table-cell;
+        padding: 2.2em 1em;
       }
       
       #status b {
@@ -81,6 +81,10 @@
       
       #header.moving {
         color: darkred;
+      }
+      
+      .active {
+        background-color: rgb(110, 145, 124);
       }
     </style>
   </head>
@@ -128,6 +132,7 @@
             });
             beaconlist += '</ul>';
             document.getElementById('beacons').innerHTML = beaconlist;
+            document.getElementById('beacons').getElementsByTagName('li')[0].classList.add('active');
             
             var timer = setInterval(function() {
               stickers.counter += 1;
@@ -167,6 +172,13 @@
           stickers.statusText.innerHTML = '<ul><li id="counter">0</li></ul>';
           stickers.headerText.innerHTML = stickers.myStickers[id].color + ' ' + stickers.myStickers[id].type;
           stickers.counter = 0;
+          
+          var beaconlist = document.getElementById('beacons').getElementsByTagName('li');
+          Array.prototype.forEach.call(beaconlist, function(val, i) {
+            val.classList.remove('active');
+          });
+
+          beaconlist[id].classList.add('active');
         }
       }
 
