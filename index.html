@@ -14,9 +14,29 @@
       }
 
       #stickers {
-        height: 300px;
+        height: 120px;
         width: 768px;
         max-width: 100%;
+      }
+      
+      #status, #beacons {
+        position: fixed;
+        left: 0;
+        right: 0;
+        padding: 2.2em 1em;
+        text-align: center;
+        color: #fff;
+        background-color: #870052;
+        font-size: 16px;
+      }
+      
+      #status {
+        top: 0;
+      }
+      
+      #beacons {
+        bottom: 0;
+        background-color: rgb(110, 145, 124);
       }
 
       .vertical-center {
@@ -27,16 +47,8 @@
 
       #header {
         color: #fff;
-        font-size: 40px;
+        font-size: 48px;
         text-align: center;
-      }
-
-      #status, #beacons {
-        padding: 1.2em 1em;
-        text-align: center;
-        color: #fff;
-        background-color: #870052;
-        font-size: 14px;
       }
       
       #status ul, #beacons ul {
@@ -74,9 +86,9 @@
   </head>
   <body class="not-in-range">
 
+    <div id="status"><ul><li id="counter">&nbsp;</li></ul></div>
     <div id="stickers" class="vertical-center">
       <h1 id="header"></h1>
-      <div id="status"><ul><li id="counter">&nbsp;</li></ul></div>
     </div>
 
     <script>
@@ -105,11 +117,11 @@
 
           ws.onopen = function(event) {
             ws.send(JSON.stringify(stickers.myStickers[0]));
-            stickers.headerText.innerHTML = 'Scanning for ' + stickers.myStickers[0].color + ' ' + stickers.myStickers[0].type;
+            stickers.headerText.innerHTML = stickers.myStickers[0].color + ' ' + stickers.myStickers[0].type;
             
             var beacons = document.createElement('div');
             beacons.id = 'beacons';
-            document.getElementById('stickers').appendChild(beacons);
+            document.body.appendChild(beacons);
             var beaconlist = '<ul>';
             stickers.myStickers.forEach(function(val, i) {
               beaconlist += '<li><a href="javascript:stickers.scanFor(' + i + ');">' + val.type + '</a></li>';
@@ -140,12 +152,12 @@
 
           ws.onclose = function(event) {
             ws = null;
-            stickers.headerText.innerHTML = 'Connection closed';
+            stickers.headerText.innerHTML = 'connection closed';
             document.body.classList.add('not-in-range');
           };
 
           ws.onerror = function(event) {
-            stickers.headerText.innerHTML = 'Connection error';
+            stickers.headerText.innerHTML = 'connection error';
             document.body.classList.add('not-in-range');
           };
         },
@@ -153,10 +165,9 @@
           ws.send(JSON.stringify(stickers.myStickers[id]));
           document.body.classList.add('not-in-range');
           stickers.statusText.innerHTML = '<ul><li id="counter">&nbsp;</li></ul>';
-          stickers.headerText.innerHTML = 'Scanning for ' + stickers.myStickers[id].color + ' ' + stickers.myStickers[id].type;
+          stickers.headerText.innerHTML = stickers.myStickers[id].color + ' ' + stickers.myStickers[id].type;
           stickers.counter = 0;
         }
-          
       }
 
       stickers.init();
