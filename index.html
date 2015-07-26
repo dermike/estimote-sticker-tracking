@@ -59,12 +59,16 @@
         color: #cc0099;
       }
       
-      .moving {
+      .not-in-range {
         background-color: #ff9999;
+      }
+      
+      #header.moving {
+        color: darkred;
       }
     </style>
   </head>
-  <body class="moving">
+  <body class="not-in-range">
 
     <div id="stickers" class="vertical-center">
       <h1 id="header"></h1>
@@ -112,6 +116,9 @@
             var timer = setInterval(function() {
               stickers.counter += 1;
               document.getElementById('counter').innerHTML = stickers.counter;
+              if (stickers.counter >= 120) {
+                document.body.classList.add('not-in-range');
+              }
             }, 1000);
           };
 
@@ -119,27 +126,28 @@
             data = JSON.parse(event.data);
             stickers.statusText.innerHTML = '<ul><li id="counter">&nbsp;</li><li>' + data.temperature + '&deg;</li><li><b>X:</b>' + data.acceleration.x + '</li><li><b>Y:</b> ' + data.acceleration.y + '</li><li><b>Z:</b> ' + data.acceleration.z + '</li></ul>';
             if (data.moving) {
-              document.querySelector('body').classList.add('moving');
+              document.getElementById('header').classList.add('moving');
             } else {
-              document.querySelector('body').classList.remove('moving');
+              document.getElementById('header').classList.remove('moving');
             }
+            document.body.classList.remove('not-in-range');
             stickers.counter = 0;
           };
 
           ws.onclose = function(event) {
             ws = null;
             stickers.headerText.innerHTML = 'Connection closed';
-            document.querySelector('body').classList.add('moving');
+            document.body.classList.add('not-in-range');
           };
 
           ws.onerror = function(event) {
             stickers.headerText.innerHTML = 'Connection error';
-            document.querySelector('body').classList.add('moving');
+            document.body.classList.add('not-in-range');
           };
         },
         scanFor: function(id) {
           ws.send(JSON.stringify(stickers.myStickers[id]));
-          document.querySelector('body').classList.add('moving');
+          document.body.classList.add('not-in-range');
           stickers.statusText.innerHTML = '<ul><li id="counter">&nbsp;</li></ul>';
           stickers.headerText.innerHTML = 'Scanning for ' + stickers.myStickers[id].color + ' ' + stickers.myStickers[id].type;
           stickers.counter = 0;
