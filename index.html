@@ -86,7 +86,7 @@
   </head>
   <body class="not-in-range">
 
-    <div id="status"><ul><li id="counter">&nbsp;</li></ul></div>
+    <div id="status"><ul><li id="counter">0</li></ul></div>
     <div id="stickers" class="vertical-center">
       <h1 id="header"></h1>
     </div>
@@ -140,7 +140,7 @@
 
           ws.onmessage = function(event) {
             data = JSON.parse(event.data);
-            stickers.statusText.innerHTML = '<ul><li id="counter">&nbsp;</li><li>' + data.temperature + '&deg;</li><li><b>X:</b>' + data.acceleration.x + '</li><li><b>Y:</b> ' + data.acceleration.y + '</li><li><b>Z:</b> ' + data.acceleration.z + '</li></ul>';
+            stickers.statusText.innerHTML = '<ul><li id="counter">0</li><li>' + data.temperature + '&deg;</li><li><b>X:</b>' + data.acceleration.x + '</li><li><b>Y:</b> ' + data.acceleration.y + '</li><li><b>Z:</b> ' + data.acceleration.z + '</li></ul>';
             if (data.moving) {
               document.getElementById('header').classList.add('moving');
             } else {
@@ -164,7 +164,7 @@
         scanFor: function(id) {
           ws.send(JSON.stringify(stickers.myStickers[id]));
           document.body.classList.add('not-in-range');
-          stickers.statusText.innerHTML = '<ul><li id="counter">&nbsp;</li></ul>';
+          stickers.statusText.innerHTML = '<ul><li id="counter">0</li></ul>';
           stickers.headerText.innerHTML = stickers.myStickers[id].color + ' ' + stickers.myStickers[id].type;
           stickers.counter = 0;
         }
