@@ -212,6 +212,7 @@
         scanFor: function(id) {
           ws.send(JSON.stringify(stickers.myStickers[id]));
           document.body.classList.add('not-in-range');
+          document.getElementById('header').classList.remove('moving');
           stickers.statusText.innerHTML = '<ul><li id="counter">0</li></ul>';
           stickers.headerText.innerHTML = stickers.myStickers[id].color + ' ' + stickers.myStickers[id].type;
           stickers.counter = 0;
