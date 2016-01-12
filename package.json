@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/dermike/estimote-sticker-tracking#readme",
   "dependencies": {
-    "noble": "^1.2.1",
+    "noble": "^1.3.0",
     "ws": "^1.0.1"
   }
 }
